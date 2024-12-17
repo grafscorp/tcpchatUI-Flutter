@@ -8,14 +8,23 @@ import (
 
 
 func main() {
+	/* Parse CLI arguments */
+	args := map[string]string { "port" : "" }
+	parseArgs(args)
+	/* Check if port is correct (it is most basic check that do not cover all possible cases) */
+	if len(args["port"]) < 2 || args["port"][0] != ':' {
+		logger(log { time.Now(), true, false, false, "Usage:" + os.Args[0] + "port :<your port num>", nil })
+		os.Exit(1)
+	}
 	cleanup(nil)
-	listener, err := net.Listen("tcp4", ":50051")
+	/* If port value is incorrect, user will see an error */
+	listener, err := net.Listen("tcp4", args["port"])
 	if err != nil {
 		logger(log { time.Now(), true, false, false, "could not open listener", err })
 		os.Exit(1)
 	}
 	defer finish(listener, 0)
-	go logger(log { time.Now(), false, false, true, "Server started", nil })
+	go logger(log { time.Now(), false, false, true, "Server started on address " + listener.Addr().String(), nil })
 	go sender()
 	go listenCLI(listener)
 	for {
