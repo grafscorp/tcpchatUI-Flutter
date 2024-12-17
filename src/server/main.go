@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"net"
 	"os"
@@ -74,6 +75,23 @@ func handleConnection(conn net.Conn) {
 	conns_mutex.Unlock()
 }
 
+func listenCLI() {
+	for {
+		reader := bufio.NewReader(os.Stdin)
+		data, err := reader.ReadBytes(byte('\n'))
+		if err != nil {
+			fmt.Println("Error:", err)
+			continue	
+		}
+		text := string(data)
+		switch(text[:len(text) - 1]) {
+		case "quit":
+			fmt.Println("Shutting server down...")
+			os.Exit(1)
+		}
+	}
+}
+
 func main() {
 	listener, err := net.Listen("tcp4", ":50051")
 	if err != nil {
@@ -83,6 +101,7 @@ func main() {
 	defer listener.Close()
 	fmt.Println(time.Now().Format(time.Kitchen) + " Server started")
 	go sender()
+	go listenCLI()
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
