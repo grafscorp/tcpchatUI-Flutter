@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"net"
 	"os"
@@ -17,22 +16,7 @@ var conns_mutex sync.Mutex
 
 var sender_chan chan uint32 = make(chan uint32, 10)
 
-func listenCLI() {
-	for {
-		reader := bufio.NewReader(os.Stdin)
-		data, err := reader.ReadBytes(byte('\n'))
-		if err != nil {
-			fmt.Println("Error:", err)
-			continue	
-		}
-		text := string(data)
-		switch(text[:len(text) - 1]) {
-		case "quit":
-			fmt.Println("Shutting server down...")
-			os.Exit(1)
-		}
-	}
-}
+
 
 func main() {
 	listener, err := net.Listen("tcp4", ":50051")
