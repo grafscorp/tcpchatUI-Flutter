@@ -17,33 +17,6 @@ var conns_mutex sync.Mutex
 
 var sender_chan chan uint32 = make(chan uint32, 10)
 
-func handleConnection(conn net.Conn) {
-	defer conn.Close()
-	var conn_id uint32 = 0
-
-	conns_mutex.Lock()
-	for ; ; conn_id++ {
-		if _, ok := conns[conn_id]; !ok {
-			conns[conn_id] = conn
-			break
-		}
-	}
-	conns_mutex.Unlock()
-
-	var done chan bool = make(chan bool)
-	go listenConnection(conn, done)
-	res := <-done
-	if res {
-		fmt.Println("Connection closed:", conn)
-	} else {
-		fmt.Println("Error in connection:", conn)
-	}
-
-	conns_mutex.Lock()
-	delete(conns, conn_id)
-	conns_mutex.Unlock()
-}
-
 func listenCLI() {
 	for {
 		reader := bufio.NewReader(os.Stdin)
