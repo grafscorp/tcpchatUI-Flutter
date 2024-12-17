@@ -35,6 +35,13 @@ func main() {
 			fmt.Println("Error:", err)
 			break	
 		}
+		line := string(data)
+		/* Empty string */
+		if (len(line) < 2) {
+			continue
+		}
+		/* We don't need newline here */
+		data = []byte(line[:len(line) - 1])
 		_, err = conn.Write(data)
 		if err != nil {
 			fmt.Println("Error sending data:", err)
