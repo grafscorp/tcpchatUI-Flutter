@@ -17,20 +17,6 @@ var conns_mutex sync.Mutex
 
 var sender_chan chan uint32 = make(chan uint32, 10)
 
-func sender() {
-	for {
-		id := <-sender_chan
-		msg_mutex.Lock()
-		data := msgs[id]
-		msg_mutex.Unlock()
-		conns_mutex.Lock()
-		for _, c := range conns {
-			c.Write(data) // errors here shoud be ignored
-		}
-		conns_mutex.Unlock()
-	}
-}
-
 func listenConnection(conn net.Conn, done chan bool) {
 	for {
 		var data []byte = make([]byte, 1024)
