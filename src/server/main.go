@@ -7,22 +7,6 @@ import (
 	"time"
 )
 
-func finish(listener net.Listener, code int) {
-	cleanup(listener)
-	os.Exit(code)
-}
-
-func cleanup(listener net.Listener) {
-	msgs = make([][]byte, 0)
-	for _, val := range conns {
-		val.Close()
-	}
-	conns = make(map[uint32]net.Conn, 0)
-	sender_chan = make(chan uint32, 10)
-	if listener != nil {
-		listener.Close()
-	}
-}
 
 func main() {
 	cleanup(nil)

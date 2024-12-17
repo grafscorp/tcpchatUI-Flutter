@@ -24,7 +24,7 @@ func listenConnection(conn net.Conn, done chan bool) {
 		msg_mutex.Lock()
 		msgs = append(msgs, data)
 		msgid := uint32(len(msgs) - 1) // Message id
-		fmt.Println(time.Now().Format(time.Kitchen) + " Message received\n>" + string(data))
+		fmt.Println(time.Now().Format(time.Kitchen) + " > " + string(data))
 		msg_mutex.Unlock()
 		sender_chan<-msgid // Notify sender
 	}
