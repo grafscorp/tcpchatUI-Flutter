@@ -17,6 +17,7 @@ func listenConnection(conn net.Conn, done chan bool) {
 		_, err := conn.Read(data)
 		if err != nil {
 			done<-true
+			logger(log { time.Now(), false, true, false, "unable to receive data: " + err.Error(), nil })
 			return
 		}
 		/* Write data to msgs */

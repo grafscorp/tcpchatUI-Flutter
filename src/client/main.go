@@ -21,7 +21,13 @@ func listen(conn net.Conn) {
 }
 
 func main() {
-	conn, err := net.Dial("tcp4", "127.0.0.1:50051")
+	args := map[string]string{ "name" : "", "pwd" : "", "address" : "" }
+	parseArgs(args)
+	if args["address"] == "" {
+		fmt.Println("Usage: " + os.Args[0] + " address <server address> pwd <password>")
+		os.Exit(1)
+	}
+	conn, err := net.Dial("tcp4", args["address"])
 	if err != nil {
 		fmt.Println("Error: could not connect to server")
 		os.Exit(1)
@@ -46,7 +52,11 @@ func main() {
 			break
 		}
 		/* We don't need newline here */
-		data = []byte(line)
+		data = ([]byte(args["name"] + ": " + line))
+		if len(data) >= 1024 {
+			data = data[:1024]
+		} // Yeah, text could be truncated
+		
 		_, err = conn.Write(data)
 		if err != nil {
 			fmt.Println("Error sending data:", err)

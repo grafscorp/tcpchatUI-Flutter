@@ -9,11 +9,12 @@ import (
 
 func main() {
 	/* Parse CLI arguments */
-	args := map[string]string { "port" : "" }
+	args := map[string]string { "port" : "", "pwd" : "" }
 	parseArgs(args)
-	/* Check if port is correct (it is most basic check that do not cover all possible cases) */
+	/* Check if port is correct (it is most basic check that do not cover all possible cases) 
+	   also check for another options*/
 	if len(args["port"]) < 2 || args["port"][0] != ':' {
-		logger(log { time.Now(), true, false, false, "Usage:" + os.Args[0] + "port :<your port num>", nil })
+		logger(log { time.Now(), true, false, false, "Usage: " + os.Args[0] + " port :<your port num> pwd <password>", nil })
 		os.Exit(1)
 	}
 	cleanup(nil)
