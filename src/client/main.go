@@ -16,7 +16,7 @@ func listen(conn net.Conn) {
 			fmt.Println("Error Receiving data:", err)
 			os.Exit(1)	
 		}
-		fmt.Println(time.Now().Format(time.Kitchen) + ":" + string(buf))
+		fmt.Println(time.Now().Format(time.Kitchen) + ": " + string(buf))
 	}
 }
 
@@ -40,8 +40,13 @@ func main() {
 		if (len(line) < 2) {
 			continue
 		}
+		line = line[:len(line) - 1]
+		if (line == "!stop") {
+			fmt.Println("Closing client...")
+			break
+		}
 		/* We don't need newline here */
-		data = []byte(line[:len(line) - 1])
+		data = []byte(line)
 		_, err = conn.Write(data)
 		if err != nil {
 			fmt.Println("Error sending data:", err)
