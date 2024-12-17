@@ -17,6 +17,11 @@ var conns_mutex sync.Mutex
 /* Channel that is used by Sender() (listening) and listenConnection() (sending) */
 var sender_chan chan uint32 = make(chan uint32, 10)
 
+/* Only one goroutine should use stdout at the same time */
+var console_mutex sync.Mutex
+
+// TODO: file mutex when needed
+
 
 /* Finish program with some exit code */ 
 func finish(listener net.Listener, code int) {
