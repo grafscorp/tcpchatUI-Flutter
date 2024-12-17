@@ -1,15 +1,16 @@
-package main 
+package main
 
 import (
 	"bufio"
-	"os"
 	"fmt"
+	"net"
+	"os"
 )
 
 /*
  This is more like a prototipe. This function should wait for input to stdin and react to it.
- */
-func listenCLI() {
+*/
+func listenCLI(listener net.Listener) {
 	for {
 		reader := bufio.NewReader(os.Stdin)
 		data, err := reader.ReadBytes(byte('\n'))
@@ -22,7 +23,7 @@ func listenCLI() {
 		/* Actions performed when command is entered */
 		case "quit":
 			fmt.Println("Shutting server down...")
-			os.Exit(1)
+			finish(listener, 0)
 		default:
 			fmt.Println("Unknown command")
 		}
