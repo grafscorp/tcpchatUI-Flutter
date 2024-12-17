@@ -24,6 +24,9 @@ func listenCLI(listener net.Listener) {
 		case "quit":
 			fmt.Println("Shutting server down...")
 			finish(listener, 0)
+		case "reset":
+			fmt.Println("Reset...")
+			cleanup(nil)
 		default:
 			fmt.Println("Unknown command")
 		}

@@ -26,12 +26,15 @@ func finish(listener net.Listener, code int) {
 
 /* Reset all global objects (and listener from main()) to default values */
 func cleanup(listener net.Listener) {
+	msg_mutex.Lock()
 	msgs = make([][]byte, 0)
+	msg_mutex.Unlock()
+	conns_mutex.Lock()
 	for _, val := range conns {
 		val.Close()
 	}
 	conns = make(map[uint32]net.Conn, 0)
-	sender_chan = make(chan uint32, 10)
+	conns_mutex.Unlock()
 	if listener != nil {
 		listener.Close()
 	}
