@@ -2,13 +2,13 @@ package main
 
 import (
 	"net"
-	"fmt"
+	"time"
 )
 
 /*
  This function manages connection life cycle. Here it is added to and removed from conns slice,
  here connaction will be closed. Here listenConnection() function is being called for conn connection.
- */
+*/
 func handleConnection(conn net.Conn) {
 	/* It is not really needed since this function will get to this call
 	   obly when connection will be closed (or some another error will occurr) */
@@ -26,11 +26,12 @@ func handleConnection(conn net.Conn) {
 	/* Wait for listenConnection() to end */
 	var done chan bool = make(chan bool)
 	go listenConnection(conn, done)
+	logger(log { time.Now(), false, false, true, "Started listening: " + conn.RemoteAddr().String(), nil })
 	res := <-done
 	if res {
-		fmt.Println("Connection closed:", conn)
+		logger(log { time.Now(), false, false, true, "Connection closed: " + conn.RemoteAddr().String(), nil })
 	} else {
-		fmt.Println("Error in connection:", conn)
+		logger(log { time.Now(), true, false, false, "Error in connection: " + conn.RemoteAddr().String(), nil })
 	}
 	/* Delete connection from list */
 	conns_mutex.Lock()

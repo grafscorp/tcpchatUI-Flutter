@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 	"net"
 )
@@ -24,7 +23,7 @@ func listenConnection(conn net.Conn, done chan bool) {
 		msg_mutex.Lock()
 		msgs = append(msgs, data)
 		msgid := uint32(len(msgs) - 1) // Message id
-		fmt.Println(time.Now().Format(time.Kitchen) + " > " + string(data))
+		logger(log { time.Now(), false, false, true, time.Now().Format(time.Kitchen) + " > " + string(data), nil })
 		msg_mutex.Unlock()
 		sender_chan<-msgid // Notify sender
 	}

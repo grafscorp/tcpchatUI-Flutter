@@ -2,9 +2,9 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"net"
 	"os"
+	"time"
 )
 
 /*
@@ -15,20 +15,20 @@ func listenCLI(listener net.Listener) {
 		reader := bufio.NewReader(os.Stdin)
 		data, err := reader.ReadBytes(byte('\n'))
 		if err != nil {
-			fmt.Println("Error:", err)
+			logger(log { time.Now(), false, true, false, "Can't read CLI input", err })
 			continue	
 		}
 		text := string(data)
 		switch(text[:len(text) - 1]) {
 		/* Actions performed when command is entered */
 		case "quit":
-			fmt.Println("Shutting server down...")
+			logger(log { time.Now(), false, false, true, "Shutting server down...", nil })
 			finish(listener, 0)
 		case "reset":
-			fmt.Println("Reset...")
+			logger(log { time.Now(), false, false, true, "Reset...", nil })
 			cleanup(nil)
 		default:
-			fmt.Println("Unknown command")
+			logger(log { time.Now(), false, true, false, "Unknown command", nil })
 		}
 	}
 }

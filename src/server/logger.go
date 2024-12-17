@@ -11,6 +11,7 @@ type log struct {
 	is_warning bool
 	is_info    bool
 	text     string
+	err       error
 }
 
 func logger(l log) {
@@ -24,7 +25,10 @@ func logger(l log) {
 	if l.is_info {
 		text += "[INFO]"
 	}
-	text += " " + l.text
+	if l.err != nil {
+		text += " (" + l.err.Error() + ") "
+	}
+	text += ": " + l.text
 	/* TODO: logging into file */
 	console_mutex.Lock()
 	fmt.Println(text)
