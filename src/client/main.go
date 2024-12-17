@@ -16,7 +16,7 @@ func listen(conn net.Conn) {
 			fmt.Println("Error Receiving data:", err)
 			os.Exit(1)	
 		}
-		fmt.Println(time.Now().Format(time.Kitchen) + ": " + string(buf))
+		fmt.Println("[" + time.Now().Format(time.Kitchen) + "] " + string(buf))
 	}
 }
 
