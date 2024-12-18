@@ -25,7 +25,7 @@ class _GroupChatPageState extends State<GroupChatPage> {
               color: Color.fromARGB(255, 25, 21, 32),
               width: 600,
             ),
-          )
+          ),
         ],
       ),
     );
